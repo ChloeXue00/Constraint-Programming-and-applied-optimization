@@ -1,54 +1,6 @@
 from z3 import *
 
-# edges = {
-#     'edge_6_5', 'edge_6_4', 'edge_6_3', 'edge_6_2', 'edge_6_1',
-#     'edge_5_4', 'edge_5_3', 'edge_5_2', 'edge_5_1',
-#     'edge_4_3', 'edge_4_2', 'edge_4_1',
-#     'edge_3_2', 'edge_3_1',
-#     'edge_2_1'
-# }
-#
-# # 使用 edge 创建布尔变量
-# edge_vars = {edge: Bool(edge) for edge in edges}
 
-# 输出 edge_vars 字典，检查是否创建成功
-# for edge, var in edge_vars.items():
-#     print(f"{edge}: {var}")
-
-#
-# weights = {'edge_6_5':293,'edge_6_4':91, 'edge_6_3':81, 'edge_6_2': 209, 'edge_6_1':65,
-#         'edge_5_4':57, 'edge_5_3': 156,'edge_5_2': 42, 'edge_5_1':62,
-#         'edge_4_3':116, 'edge_4_2':101, 'edge_4_1':64 ,
-#         'edge_3_2':72, 'edge_3_1':52,
-#         'edge_2_1':54
-# }
-#
-# machine_node = ['node1','node2','node3','node4','node5','node6']
-# node_vars = {node: Bool(node) for node in machine_node}
-#
-# solver = Optimize()
-#
-# #source and destination constraints
-# #5's edge
-# solver.add(edge_vars['edge_5_4'] + edge_vars['edge_5_3'] + edge_vars['edge_5_2'] + edge_vars['edge_5_1'] ==1)
-# #3's edge
-# solver.add(edge_vars['edge_3_2'] + edge_vars['edge_3_1'] ==1)
-#
-#
-# #constrains for inter nodes
-#
-# solver.add(If(node_vars['node1'], edge_vars['edge_4_1'] + edge_vars['edge_6_1'] + edge_vars['edge_5_1'] + edge_vars['edge_2_1'] + edge_vars['edge_3_1'] == 2, edge_vars['edge_4_1'] + edge_vars['edge_6_1'] + edge_vars['edge_5_1'] + edge_vars['edge_2_1'] + edge_vars['edge_3_1'] == 0))
-# solver.add(If(node_vars['node2'], edge_vars['edge_6_2'] + edge_vars['edge_5_2'] + edge_vars['edge_4_2'] + edge_vars['edge_3_2'] + edge_vars['edge_2_1'] == 2, edge_vars['edge_6_2'] + edge_vars['edge_5_2'] + edge_vars['edge_4_2'] + edge_vars['edge_3_2'] + edge_vars['edge_2_1'] == 0))
-# solver.add(If(node_vars['node3'], edge_vars['edge_6_3'] + edge_vars['edge_5_3'] + edge_vars['edge_4_3'] + edge_vars['edge_3_2'] + edge_vars['edge_3_1'] == 2, edge_vars['edge_6_3'] + edge_vars['edge_5_3'] + edge_vars['edge_4_3'] + edge_vars['edge_3_2'] + edge_vars['edge_3_1'] == 0))
-# solver.add(If(node_vars['node4'], edge_vars['edge_4_3'] + edge_vars['edge_4_2'] + edge_vars['edge_4_1'] + edge_vars['edge_5_4'] + edge_vars['edge_6_4'] == 2, edge_vars['edge_4_3'] + edge_vars['edge_4_2'] + edge_vars['edge_4_1'] + edge_vars['edge_5_4'] + edge_vars['edge_6_4'] == 0))
-# solver.add(If(node_vars['node5'], edge_vars['edge_5_4'] + edge_vars['edge_5_3'] + edge_vars['edge_5_2'] + edge_vars['edge_5_1'] + edge_vars['edge_6_5'] == 2, edge_vars['edge_5_4'] + edge_vars['edge_5_3'] + edge_vars['edge_5_2'] + edge_vars['edge_5_1'] + edge_vars['edge_6_5'] == 0))
-# solver.add(If(node_vars['node6'], edge_vars['edge_6_5'] + edge_vars['edge_6_4'] + edge_vars['edge_6_3'] + edge_vars['edge_6_2'] + edge_vars['edge_6_1'] == 2, edge_vars['edge_6_5'] + edge_vars['edge_6_4'] + edge_vars['edge_6_3'] + edge_vars['edge_6_2'] + edge_vars['edge_6_1'] == 0))
-#
-# objective = Sum([If(edge_vars[edge], weights[edge], 0) for edge in edges])
-# solver.minimize(objective)
-# # Machine 5 (F) and Machine 3 (C) constraints
-# solver.add(edge_vars['f'] + edge_vars['g'] == 1)  # F's edges (g, f)
-# solver.add(edge_vars['c'] + edge_vars['f'] == 1)  # C's edges (f, g)
 
 from queue import PriorityQueue
 
@@ -79,13 +31,13 @@ class Graph:
         return neighbors
 
 
-# 定义启发式函数，使用简单的估计（假设曼哈顿距离）
+# 
 def heuristic(node, goal, node_coords):
     x1, y1 = node_coords[node]
     x2, y2 = node_coords[goal]
     return abs(x1 - x2) + abs(y1 - y2)
 
-# A*算法寻找最短路径
+# 
 def a_star(graph, start, goal, node_coords):
     pq = PriorityQueue()
     pq.put((0, start))
@@ -99,7 +51,7 @@ def a_star(graph, start, goal, node_coords):
         current = pq.get()[1]
 
         if current == goal:
-            # 找到目标，重建路径
+            # 
             path = []
             while current in came_from:
                 path.append(current)
@@ -119,7 +71,7 @@ def a_star(graph, start, goal, node_coords):
 
     return None
 
-# 创建图的邻接表表示
+# 
 graph = {
     'node5': [('node5E', 25), ('node5W', 21), ('node5S', 17), ('node5N', 21)],
     'node5E': [('node5', 25), ('node2', 17)],
@@ -138,7 +90,6 @@ graph = {
     'node3NE': [('node3N', 28), ('nodeD', 8)],
 }
 
-# 假设我们有所有节点的坐标
 node_coords = {
     'node5': (28, 34), 'node5E': (53, 34), 'node5W': (7, 34), 'node5N': (28, 51), 'node5S': (28, 17),
     'nodeBN': (7, 17), 'node1W': (53, 51), 'node1': (73, 51), 'node1E': (91, 51), 'nodeDN': (119, 51),
@@ -234,37 +185,37 @@ edge_names = [name for name, _ in edges.items()]
 edge_list = [edge for _, edge in edges.items()]
 weight = [weight for _ in edge_weights]
 edge_vars = {edge_name: Bool(edge_name) for edge_name in edges_weights}
-# 检查是否成功创建了布尔变量
+# 
 # print("Edge variables created for Z3 solver:")
 # for edge_name, var in edge_vars.items():
 #     print(f"{edge_name}: {var}")
 
 node_to_edges = {}
 for edge_name, edge in edges.items():
-    # 添加起始节点的映射
+    # 
     if edge.start not in node_to_edges:
         node_to_edges[edge.start] = []
     node_to_edges[edge.start].append(edge_name)
 
-    # 添加终止节点的映射
+    # 
     if edge.end not in node_to_edges:
         node_to_edges[edge.end] = []
     node_to_edges[edge.end].append(edge_name)
 
-# 输出检查节点到边的映射
+# 
 for node, edges in node_to_edges.items():
     print(f"{node}: {edges}")
 solver = Solver()
 
-# 对 node5 的边进行动态约束
+# containt node5 
 node5_edges = node_to_edges['node5']
 solver.add(Sum([edge_vars[edge] for edge in node5_edges]) == 1)
 
-# 对 node3 的边进行动态约束
+# constraint node3 edge 
 node3_edges = node_to_edges['node3']
 solver.add(Sum([edge_vars[edge] for edge in node3_edges]) == 1)
 
-# 检查 solver 是否可行
+# check solver 
 if solver.check() == sat:
     model = solver.model()
     print("Solution found:")
@@ -275,30 +226,10 @@ else:
     print("No solution found.")
 
 
+
 #
-# solver = Optimize()
-#
-# #source and destination constraints
-# #5's edge
-# solver.add(edge_vars['edge_5_4'] + edge_vars['edge_5_3'] + edge_vars['edge_5_2'] + edge_vars['edge_5_1'] ==1)
-# #3's edge
-# solver.add(edge_vars['edge_3_2'] + edge_vars['edge_3_1'] ==1)
-#
-#
-# #constrains for inter nodes
-#
-# solver.add(If(node_vars['node1'], edge_vars['edge_4_1'] + edge_vars['edge_6_1'] + edge_vars['edge_5_1'] + edge_vars['edge_2_1'] + edge_vars['edge_3_1'] == 2, edge_vars['edge_4_1'] + edge_vars['edge_6_1'] + edge_vars['edge_5_1'] + edge_vars['edge_2_1'] + edge_vars['edge_3_1'] == 0))
-# solver.add(If(node_vars['node2'], edge_vars['edge_6_2'] + edge_vars['edge_5_2'] + edge_vars['edge_4_2'] + edge_vars['edge_3_2'] + edge_vars['edge_2_1'] == 2, edge_vars['edge_6_2'] + edge_vars['edge_5_2'] + edge_vars['edge_4_2'] + edge_vars['edge_3_2'] + edge_vars['edge_2_1'] == 0))
-# solver.add(If(node_vars['node3'], edge_vars['edge_6_3'] + edge_vars['edge_5_3'] + edge_vars['edge_4_3'] + edge_vars['edge_3_2'] + edge_vars['edge_3_1'] == 2, edge_vars['edge_6_3'] + edge_vars['edge_5_3'] + edge_vars['edge_4_3'] + edge_vars['edge_3_2'] + edge_vars['edge_3_1'] == 0))
-# solver.add(If(node_vars['node4'], edge_vars['edge_4_3'] + edge_vars['edge_4_2'] + edge_vars['edge_4_1'] + edge_vars['edge_5_4'] + edge_vars['edge_6_4'] == 2, edge_vars['edge_4_3'] + edge_vars['edge_4_2'] + edge_vars['edge_4_1'] + edge_vars['edge_5_4'] + edge_vars['edge_6_4'] == 0))
-# solver.add(If(node_vars['node5'], edge_vars['edge_5_4'] + edge_vars['edge_5_3'] + edge_vars['edge_5_2'] + edge_vars['edge_5_1'] + edge_vars['edge_6_5'] == 2, edge_vars['edge_5_4'] + edge_vars['edge_5_3'] + edge_vars['edge_5_2'] + edge_vars['edge_5_1'] + edge_vars['edge_6_5'] == 0))
-# solver.add(If(node_vars['node6'], edge_vars['edge_6_5'] + edge_vars['edge_6_4'] + edge_vars['edge_6_3'] + edge_vars['edge_6_2'] + edge_vars['edge_6_1'] == 2, edge_vars['edge_6_5'] + edge_vars['edge_6_4'] + edge_vars['edge_6_3'] + edge_vars['edge_6_2'] + edge_vars['edge_6_1'] == 0))
-#
-# objective = Sum([If(edge_vars[edge], weights[edge], 0) for edge in edges])
-# solver.minimize(objective)
-#
-#
-# # 找到node5到node3的十条路径
+# # node5 to node3
+
 def find_paths(graph, start, goal, node_coords, max_paths=10):
     solver = Solver()
     path_count = 0
@@ -306,12 +237,12 @@ def find_paths(graph, start, goal, node_coords, max_paths=10):
         path = a_star(graph, start, goal, node_coords)
         if path is None:
             break
-        # 输出路径
+        # output path
         print(f"Path {path_count + 1}: {path}")
         total_weight = sum([graph[path[i]][j][1] for i in range(len(path) - 1) for j in range(len(graph[path[i]])) if graph[path[i]][j][0] == path[i + 1]])
         print(f"Total weight: {total_weight}")
 
-        # 增加排除当前路径的约束，避免重复路径
+        # add constraint to pass current found path 
         path_edges = [(path[i], path[i + 1]) for i in range(len(path) - 1)]
         solver.add(Or([Not(And(edge_vars[edge])) for edge in path_edges]))
         path_count += 1
@@ -319,5 +250,5 @@ def find_paths(graph, start, goal, node_coords, max_paths=10):
     if path_count == 0:
         print("No paths found.")
 
-# 执行搜索
+# search
 find_paths(graph, 'node5', 'node3', node_coords)
