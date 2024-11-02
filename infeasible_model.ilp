@@ -1,0 +1,44 @@
+\ Model jsp_copy
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Minimize
+ 
+Subject To
+ precedence_job2_machine4_to_machine1: - start_time[2,1] + start_time[2,4]
+   <= -98
+ precedence_job3_machine1_to_machine0: - start_time[3,0] + start_time[3,1]
+   <= -77
+ precedence_job5_machine0_to_machine3: start_time[5,0] - start_time[5,3]
+   <= -92
+ precedence_job6_machine3_to_machine4: start_time[6,3] - start_time[6,4]
+   <= -69
+ no_overlap_job3_job5_on_machine0_1: start_time[3,0] - start_time[5,0]
+   <= -77
+ no_overlap_job2_job3_on_machine1_1: start_time[2,1] - start_time[3,1]
+   <= -98
+ no_overlap_job5_job9_on_machine3_1: start_time[5,3] - start_time[9,3]
+   <= -92
+ no_overlap_job6_job9_on_machine3_2: - start_time[6,3] + start_time[9,3]
+   <= -75
+ no_overlap_job2_job8_on_machine4_2: - start_time[2,4] + start_time[8,4]
+   <= -98
+ no_overlap_job5_job6_on_machine4_2: - start_time[5,4] + start_time[6,4]
+   <= -93
+ no_overlap_job5_job8_on_machine4_1: start_time[5,4] - start_time[8,4]
+   <= -62
+Bounds
+ start_time[2,1] free
+ start_time[2,4] free
+ start_time[3,0] free
+ start_time[3,1] free
+ start_time[5,0] free
+ start_time[5,3] free
+ start_time[5,4] free
+ start_time[6,3] free
+ start_time[6,4] free
+ start_time[8,4] free
+ start_time[9,3] free
+Generals
+ start_time[2,1] start_time[2,4] start_time[3,0] start_time[3,1]
+ start_time[5,0] start_time[5,3] start_time[5,4] start_time[6,3]
+ start_time[6,4] start_time[8,4] start_time[9,3]
+End
